@@ -1,1 +1,1 @@
-g++  API.cpp Main.cpp mouse.cpp axis.cpp
+g++  API.cpp Main.cpp mouse.cpp axis.cpp controller.cpp

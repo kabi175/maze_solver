@@ -12,9 +12,15 @@ void Mouse::points(int& x_,int& y_){
 void Mouse::moveFwd(int step=1){
     API::moveForward(step);
     update(axis.front(dir,step));
+    int x,y;
+    axis.points(x,y);
+    API::setColor(x,y, 'G');
 }
 
 void Mouse::moveBack(int step=1){
+    int x,y;
+    axis.points(x,y);
+    API::setColor(x,y, 'R');
     turnBack();
     API::moveForward(step);
     turnBack();

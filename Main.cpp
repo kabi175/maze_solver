@@ -1,92 +1,67 @@
 #include <iostream>
 #include <string>
-#include "API.h"
-#include "mouse.h"
-
 #include <set>
 #include <utility>
 
+#include "API.h"
+#include "controller.h"
+
 using namespace std;
 
-set<pair<int,int>>lookup;
-set<pair<int,int>> destination;
+void log(const std::string& text);
 
-void add(Mouse);
-bool destiny(Mouse);
-bool find(Mouse);
+void shutDown();
 
-void dfs(Mouse);
+void dfs(Controller);
+
+int main(int argc, char* argv[]) {
+    API::setColor(0, 0, 'G');
+    API::setText(0, 0, "start");
+    log("Running...");
+    Controller controller = Controller();
+    dfs(controller);
+    return 0;
+}
+
+void dfs(Controller controller){
+    
+    controller.add();
+
+    if (controller.isEnd()){
+       exit(0);
+    }
+    if (controller.canMove(Move::Cur)){
+       return;
+    }
+
+
+    if(!API::wallLeft() && controller.canMove(Move::Left)){
+        controller.mouse.turnLeft();
+        controller.mouse.moveFwd(1);
+        dfs(controller);
+        controller.mouse.moveBack(1);
+        controller.mouse.turnRight();
+    }
+    if(!API::wallFront() && controller.canMove(Move::Fwd)){
+        controller.mouse.moveFwd(1);
+        dfs(controller);
+        controller.mouse.moveBack(1);
+    }
+    if(!API::wallRight() && controller.canMove(Move::Right)){
+        controller.mouse.turnRight();
+        controller.mouse.moveFwd(1);
+        dfs(controller);
+        controller.mouse.moveBack(1);
+        controller.mouse.turnLeft();
+    }
+    controller.add();
+    return;
+}
 
 void log(const std::string& text) {
     std::cerr << text << std::endl;
 }
 
-int main(int argc, char* argv[]) {
-    destination.insert(make_pair(8-1,8-1));
-    destination.insert(make_pair(9-1,8-1));
-    destination.insert(make_pair(9-1,8-1));
-    destination.insert(make_pair(9-1,9-1));
-    log("Running...");
-    API::setColor(0, 0, 'G');
-    API::setText(0, 0, "abc");
-    Mouse mouse = Mouse();
-    dfs(mouse);
-    return 0;
-}
-
-void dfs(Mouse mouse){
-    if(find(mouse)){
-        return;
-    }
-    add(mouse);
-    if (destiny(mouse)){
-       exit(0);
-    }
-    if(!API::wallFront()){
-        mouse.moveFwd(1);
-        dfs(mouse);
-        mouse.moveBack(1);
-    }
-    if(!API::wallLeft()){
-        mouse.turnLeft();
-        mouse.moveFwd(1);
-        dfs(mouse);
-        mouse.moveBack(1);
-        mouse.turnRight();
-    }
-    if(!API::wallRight()){
-        mouse.turnRight();
-        mouse.moveFwd(1);
-        dfs(mouse);
-        mouse.moveBack(1);
-        mouse.turnLeft();
-    }
-    return;
-}
-
-bool destiny(Mouse mouse){
-    int x,y;
-    mouse.points(x,y);
-    auto iter = destination.find(make_pair(x,y));
-    if (iter != destination.end()){
-        return true;
-    }
-    return false;
-
-}
-
-void add(Mouse mouse){
-    int x,y;
-    mouse.points(x,y);
-    lookup.insert(make_pair(x,y));
-}
-
-bool find(Mouse mouse){
-    int x,y;
-    mouse.points(x,y);
-    auto iter = lookup.find(make_pair(x,y));
-    if (iter != lookup.end()){
-        return true;
-    }
-    return false;
+void shutDown(){
+    exit(1);
 }

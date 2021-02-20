@@ -1,14 +1,10 @@
 #include "axis.h"
 
 class Mouse{
-    private:
+    public:
         Axis axis;
         Direction dir;
-    public:
-        Mouse(){
-            axis = Axis();
-            dir = north;
-        }
+        Mouse():axis(Axis()),dir(north){}
         void update(Axis);
         void points(int&,int&);
         void moveFwd(int);
