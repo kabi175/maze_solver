@@ -26,5 +26,4 @@ class Controller{
         bool canMove(Move);
         bool isEnd();
 
-        //void move();
 };
