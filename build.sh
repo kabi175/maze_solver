@@ -1,0 +1,1 @@
+g++  API.cpp Main.cpp mouse.cpp axis.cpp
